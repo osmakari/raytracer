@@ -1,0 +1,14 @@
+C:\Users\Osku\source\repos\Raycaster\Raycaster\obj\Release\MainWindow.g.cs
+C:\Users\Osku\source\repos\Raycaster\Raycaster\obj\Release\App.g.cs
+C:\Users\Osku\source\repos\Raycaster\Raycaster\obj\Release\Raycaster_MarkupCompile.cache
+C:\Users\Osku\source\repos\Raycaster\Raycaster\obj\Release\Raycaster_MarkupCompile.lref
+C:\Users\Osku\source\repos\Raycaster\Raycaster\bin\Release\Raycaster.exe.config
+C:\Users\Osku\source\repos\Raycaster\Raycaster\bin\Release\Raycaster.exe
+C:\Users\Osku\source\repos\Raycaster\Raycaster\bin\Release\Raycaster.pdb
+C:\Users\Osku\source\repos\Raycaster\Raycaster\obj\Release\MainWindow.baml
+C:\Users\Osku\source\repos\Raycaster\Raycaster\obj\Release\Raycaster.g.resources
+C:\Users\Osku\source\repos\Raycaster\Raycaster\obj\Release\Raycaster.Properties.Resources.resources
+C:\Users\Osku\source\repos\Raycaster\Raycaster\obj\Release\Raycaster.csproj.GenerateResource.cache
+C:\Users\Osku\source\repos\Raycaster\Raycaster\obj\Release\Raycaster.csproj.CoreCompileInputs.cache
+C:\Users\Osku\source\repos\Raycaster\Raycaster\obj\Release\Raycaster.exe
+C:\Users\Osku\source\repos\Raycaster\Raycaster\obj\Release\Raycaster.pdb

@@ -1,0 +1,15 @@
+C:\Users\Osku\source\repos\Raycaster\Raycaster\bin\Debug\Raycaster.exe.config
+C:\Users\Osku\source\repos\Raycaster\Raycaster\bin\Debug\Raycaster.exe
+C:\Users\Osku\source\repos\Raycaster\Raycaster\bin\Debug\Raycaster.pdb
+C:\Users\Osku\source\repos\Raycaster\Raycaster\obj\Debug\Raycaster.csprojAssemblyReference.cache
+C:\Users\Osku\source\repos\Raycaster\Raycaster\obj\Debug\MainWindow.g.cs
+C:\Users\Osku\source\repos\Raycaster\Raycaster\obj\Debug\App.g.cs
+C:\Users\Osku\source\repos\Raycaster\Raycaster\obj\Debug\Raycaster_MarkupCompile.cache
+C:\Users\Osku\source\repos\Raycaster\Raycaster\obj\Debug\Raycaster_MarkupCompile.lref
+C:\Users\Osku\source\repos\Raycaster\Raycaster\obj\Debug\MainWindow.baml
+C:\Users\Osku\source\repos\Raycaster\Raycaster\obj\Debug\Raycaster.g.resources
+C:\Users\Osku\source\repos\Raycaster\Raycaster\obj\Debug\Raycaster.Properties.Resources.resources
+C:\Users\Osku\source\repos\Raycaster\Raycaster\obj\Debug\Raycaster.csproj.GenerateResource.cache
+C:\Users\Osku\source\repos\Raycaster\Raycaster\obj\Debug\Raycaster.csproj.CoreCompileInputs.cache
+C:\Users\Osku\source\repos\Raycaster\Raycaster\obj\Debug\Raycaster.exe
+C:\Users\Osku\source\repos\Raycaster\Raycaster\obj\Debug\Raycaster.pdb
