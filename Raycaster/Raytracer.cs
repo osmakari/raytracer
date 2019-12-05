@@ -10,6 +10,7 @@ namespace Raycaster
 {
 	public static class Raytracer
 	{
+
 		// List of spheres in the scene
 		public static List<Sphere> spheres = new List<Sphere>();
 		// List of light sources in the scene
@@ -65,8 +66,16 @@ namespace Raycaster
 		// Calculate surface reflections
 		static void Reflection (Sphere hsphere, Vector3 hp, Vector3 dir, int x, int y, int bounces)
 		{
+			Vector3 pos = new Vector3(); 
+			float rad = 0.1f;
+			if(hsphere != null)
+			{
+				pos = hsphere.position;
+				rad = hsphere.radius;
+			}
+
 			// Reflection vector
-			Vector3 rdir = (dir - 2 * Vector3.Dot(dir, (hp - hsphere.position).normalized) * (hp - hsphere.position).normalized).normalized;
+			Vector3 rdir = (dir - 2 * Vector3.Dot(dir, (hp - pos).normalized) * (hp - pos).normalized).normalized;
 			//Random rnd = new Random();
 			//Vector3 rv = new Vector3((float)(rnd.NextDouble() * 0.01) - 0.005f, (float)(rnd.NextDouble() * 0.01) - 0.005f, (float)(rnd.NextDouble() * 0.01) - 0.005f);
 
@@ -167,9 +176,9 @@ namespace Raycaster
 				);
 				*/
 				SetPixel(x, y, new Color(
-					ambientColor.r * c * (hsphere2.color.r / (bounces + 2)) + (ambientColor.r * ambientIntensity),
-					ambientColor.g * c * (hsphere2.color.g / (bounces + 2)) + (ambientColor.g * ambientIntensity),
-					ambientColor.b * c * (hsphere2.color.b / (bounces + 2)) + (ambientColor.b * ambientIntensity))
+					ambientColor.r * c * (hsphere2.color.r / (bounces + 1)) + (ambientColor.r * ambientIntensity),
+					ambientColor.g * c * (hsphere2.color.g / (bounces + 1)) + (ambientColor.g * ambientIntensity),
+					ambientColor.b * c * (hsphere2.color.b / (bounces + 1)) + (ambientColor.b * ambientIntensity))
 				);
 
 				if(bounces < 1)
@@ -206,102 +215,16 @@ namespace Raycaster
 			{
 				for(int x = 0; x < Display.image.Width; x++)
 				{
+					
 					// Note: Camera is always at (0, 0, 0) and is pointing (0, 0, 1)
 					// Get ray X and Y directions for the corresponding pixel
 					float xv = (x - center.x) / (float)Display.image.Height;
 					float yv = -(y - center.y) / (float)Display.image.Height;
 
-					// Create a normalized vector from xv and yv
-					Vector3 ray = new Vector3(xv * 1.2f, yv * 1.2f, 1).normalized;
-
-					Vector3 hp = null;
-					Sphere hsphere = null;
-
-					float shortest = -1;
-
-					// Go through the spheres
-					for(int rs = 0; rs < spheres.Count; rs++)
-					{
-						Vector3 m = -spheres[rs].position;
-						float r = spheres[rs].radius;
-
-						// Optimization: Check if the ray distance could be shorter than the current shortest distance
-						if (hsphere != null)
-						{
-							if (hsphere.position.magnitude - hsphere.radius < spheres[rs].position.magnitude - r)
-							{
-								continue;
-							}
-						}
-
-						// Calculate dot product between ray and negated sphere position
-						float b = Vector3.Dot(m, ray);
-						float c = Vector3.Dot(m, m) - r * r;
-
-						// Check if ray is pointing away from the sphere
-						if (c > 0.0f && b > 0.0f)
-							continue;
-
-						float discr = b * b - c;
-
-						// If discriminant is less than 0, ray missed the sphere
-						if (discr < 0.0f)
-							continue;
-
-						// Calculate intersection point
-						float t = -b - (float)Math.Sqrt(discr);
-						if (t < 0.0f)
-							t = 0.0f;
-
-						// Calculate hit point vector
-						Vector3 q = ray * t;
-						// Set this bounce if it's the shortest
-						if (shortest < 0)
-						{
-							shortest = q.magnitude;
-							hsphere = spheres[rs];
-							hp = q;
-							
-						}
-						else
-						{
-							if(q.magnitude < shortest)
-							{
-								shortest = q.magnitude;
-								hsphere = spheres[rs];
-								hp = q;
-							}
-						}
-
-					}
-					// Intersection found, set pixel and check reflection
-					if(hsphere != null)
-					{
-						float dv = Vector3.Dot(ray, hp - hsphere.position);
-						float angle = dv / (ray.magnitude * (hp - hsphere.position).magnitude);
-						
-						float c = Math.Abs(angle / (float)Math.PI);
-						/*
-						Display.DrawPixel(x, y, new Color(
-							ambientColor.r * c * hsphere.color.r + (ambientColor.r * ambientIntensity), 
-							ambientColor.g * c * hsphere.color.g + (ambientColor.g * ambientIntensity), 
-							ambientColor.b * c * hsphere.color.b + (ambientColor.b * ambientIntensity))
-						);
-						*/
-						SetPixel(x, y, new Color(
-							ambientColor.r * c * hsphere.color.r + (ambientColor.r * ambientIntensity),
-							ambientColor.g * c * hsphere.color.g + (ambientColor.g * ambientIntensity),
-							ambientColor.b * c * hsphere.color.b + (ambientColor.b * ambientIntensity))
-						);
-
-						// Reflection
-						Reflection(hsphere, hp, ray, x, y, 0);
-					}
-
+					Reflection(null, new Vector3(0, 0, 0.1f), -new Vector3(xv, yv, 1f).normalized, x, y, 0);
 				}
 			}
-
-			Debug.WriteLine("Tasks ended, drawing pixels...");
+			
 			
 			for (int y = 0; y < (int)Display.image.Height; y++)
 			{
