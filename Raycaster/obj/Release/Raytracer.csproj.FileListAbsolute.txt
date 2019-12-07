@@ -25,3 +25,16 @@ C:\Users\Osku\source\repos\raytracer\Raycaster\obj\Release\Raytracer.csproj.Gene
 C:\Users\Osku\source\repos\raytracer\Raycaster\obj\Release\Raytracer.csproj.CoreCompileInputs.cache
 C:\Users\Osku\source\repos\raytracer\Raycaster\obj\Release\Raycaster.exe
 C:\Users\Osku\source\repos\raytracer\Raycaster\obj\Release\Raycaster.pdb
+E:\Git\raycaster-current\Raycaster\bin\Release\Raycaster.exe.config
+E:\Git\raycaster-current\Raycaster\bin\Release\Raycaster.exe
+E:\Git\raycaster-current\Raycaster\bin\Release\Raycaster.pdb
+E:\Git\raycaster-current\Raycaster\obj\Release\MainWindow.g.cs
+E:\Git\raycaster-current\Raycaster\obj\Release\App.g.cs
+E:\Git\raycaster-current\Raycaster\obj\Release\Raycaster_MarkupCompile.cache
+E:\Git\raycaster-current\Raycaster\obj\Release\Raycaster_MarkupCompile.lref
+E:\Git\raycaster-current\Raycaster\obj\Release\MainWindow.baml
+E:\Git\raycaster-current\Raycaster\obj\Release\Raycaster.g.resources
+E:\Git\raycaster-current\Raycaster\obj\Release\Raycaster.Properties.Resources.resources
+E:\Git\raycaster-current\Raycaster\obj\Release\Raytracer.csproj.GenerateResource.cache
+E:\Git\raycaster-current\Raycaster\obj\Release\Raycaster.exe
+E:\Git\raycaster-current\Raycaster\obj\Release\Raycaster.pdb

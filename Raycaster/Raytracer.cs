@@ -8,9 +8,9 @@ using System.Threading;
 
 namespace Raycaster
 {
-	public static class Raytracer
+	public class Raytracer
 	{
-        public static int maxReflections = 2;
+        public static int maxReflections = 1;
 		// List of spheres in the scene
 		public static List<Sphere> spheres = new List<Sphere>();
 		// List of light sources in the scene
@@ -26,46 +26,44 @@ namespace Raycaster
 
 		public static byte[] pixels;
 
-		private static int sWidth;
-		private static int sHeight;
+		private static readonly int sWidth = 3840;
+		private static readonly int sHeight = 2160;
 
+        private static TimeSpan time = new TimeSpan();
 		// Main raytrace function
 		public static void RayTrace ()
 		{
-			// Generate some spheres to the scene
-			Random r = new Random();
-			/*for(int x = 0; x < 20; x++)
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+
+            // Generate some spheres to the scene
+            Random r = new Random();
+            /*for(int x = 0; x < 20; x++)
 			{
 				Sphere s = new Sphere(new Vector3((float)r.NextDouble() * 20 - 10f, (float)r.NextDouble() * 15 - 7.5f, (float)r.NextDouble() * 10 + 7f), (float)r.NextDouble() * 3);
 				s.color = new Color((float)r.NextDouble(), (float)r.NextDouble(), (float)r.NextDouble());
 			}
 			*/
-			Sphere s1 = new Sphere(new Vector3(-2, -5f, 10), 1.2f);
-			Sphere s2 = new Sphere(new Vector3(2, -4, 18), 1);
-			Sphere s3 = new Sphere(new Vector3(8, 2, 25), 0.4f);
-			Sphere s4 = new Sphere(new Vector3(1, 5, 27), 2);
-			Sphere s5 = new Sphere(new Vector3(-7, 1, 11), 1);
-			Sphere s6 = new Sphere(new Vector3(7, -2, 15), 2);
-			Sphere s7 = new Sphere(new Vector3(6, 7, 13), 2.5f);
-			Sphere s8 = new Sphere(new Vector3(5, 5, 18), 1.3f);
-			Sphere s9 = new Sphere(new Vector3(4, -4, 10), 0.5f);
-			Sphere s10 = new Sphere(new Vector3(2, 3, 12), 0.4f);
-			s1.color = new Color(0f, 1f, 1f);
-			s2.color = new Color(1f, 0f, 1f);
-            s3.color = new Color(1f, 0.4f, 0.3f);
-            s4.color = new Color(0.7f, 0.4f, 1f);
-            s4.color = new Color(0.4f, 0.1f, 1f);
-            s6.color = new Color(0f, 0.2f, 1f);
-            s7.color = new Color(0.7f, 0.4f, 0.5f);
-            s8.color = new Color(0.7f, 0.9f, 1f);
-            s9.color = new Color(0.6f, 0.4f, 0.1f);
-
-            // Start rendering
+            //testing purposes
             
-            Render();
-
+            GenerateSpheres gs = new GenerateSpheres();
+            // Start rendering
+            for (int i = 0; i < 20; i++)
+            {
+                maxReflections = i+1;
+                Console.Write("Calculating with " + maxReflections + " reflections ");
+                stopWatch.Start();
+                Render();
+                TimeSpan ts = stopWatch.Elapsed;
+                // Format and display the TimeSpan value.
+                string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                    ts.Hours, ts.Minutes, ts.Seconds,
+                    ts.Milliseconds / 10);
+                Console.Write("| RunTime: " + elapsedTime +"\n");
+                stopWatch.Reset();
+            }
             //Render();
-		}
+        }
 
 		static void SetPixel (int x, int y, Color c)
 		{
@@ -264,22 +262,22 @@ namespace Raycaster
 			}
 			else
 			{
-				/*
-				Vector3 planeNormal = new Vector3(0, 1, 0);
-				Vector3 planePos = new Vector3(0, -1, 0);
+				
+				Vector3 planeNormal = new Vector3(0, -5, 0);
+				Vector3 planePos = new Vector3(0, -100, 0);
 				if(rdir.y < 0)
 				{
 					float t = (hp.y - planePos.y)/rdir.y;
 
 					SetPixel(x, y, new Color(
-						0.7f/(bounces + 1), 0.7f/ (bounces + 1), 0.7f/(bounces + 1)
-					));
+						0.7f/(bounces + 1), 0.7f/ (bounces + 1), 0.99f)
+					);
 					if (bounces < maxReflections)
 					{ 
 						Reflection(null, hp + rdir * t, rdir - 2 * (Vector3.Dot(rdir, planeNormal)) * planeNormal, x, y, bounces + 1);
 					}
 				}
-				*/
+				
 				
 			}
 			
@@ -288,8 +286,8 @@ namespace Raycaster
 		
 		public static void Render ()
 		{
-			sWidth = (int)Display.image.Width;
-			sHeight = (int)Display.image.Height;
+			//sWidth = (int)Display.image.Width;
+			//sHeight = (int)Display.image.Height;
 			pixels = new byte[sWidth * sHeight * 3];
 			Debug.WriteLine("PIXELS: " + pixels.Length);
 
@@ -382,7 +380,7 @@ namespace Raycaster
 	public class LightSource
 	{
 		public Vector3 direction;
-		public float intensity = 5f;
+		public float intensity = 3f;
 
 		public LightSource ()
 		{

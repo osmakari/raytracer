@@ -22,7 +22,7 @@ namespace Raycaster
 			image = img;
 			Debug.WriteLine("W: " + image.Width + " H: " + image.Height);
 			// Initialize the Bitmap buffer
-			bmp = new WriteableBitmap((int)image.Width, (int)image.Height, 96, 96, PixelFormats.Bgr32, null);
+			bmp = new WriteableBitmap((int)image.Width, (int)image.Height, 300, 300, PixelFormats.Bgr32, null);
 			// Set the image source
 			image.Source = bmp;
 
