@@ -1,0 +1,13 @@
+E:\Git\raytracer\Raycaster\bin\Release\Raycaster.exe.config
+E:\Git\raytracer\Raycaster\bin\Release\Raycaster.exe
+E:\Git\raytracer\Raycaster\bin\Release\Raycaster.pdb
+E:\Git\raytracer\Raycaster\obj\Release\MainWindow.g.cs
+E:\Git\raytracer\Raycaster\obj\Release\App.g.cs
+E:\Git\raytracer\Raycaster\obj\Release\Raycaster_MarkupCompile.cache
+E:\Git\raytracer\Raycaster\obj\Release\Raycaster_MarkupCompile.lref
+E:\Git\raytracer\Raycaster\obj\Release\MainWindow.baml
+E:\Git\raytracer\Raycaster\obj\Release\Raycaster.g.resources
+E:\Git\raytracer\Raycaster\obj\Release\Raycaster.Properties.Resources.resources
+E:\Git\raytracer\Raycaster\obj\Release\Raytracer.csproj.GenerateResource.cache
+E:\Git\raytracer\Raycaster\obj\Release\Raycaster.exe
+E:\Git\raytracer\Raycaster\obj\Release\Raycaster.pdb

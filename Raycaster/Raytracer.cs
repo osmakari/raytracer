@@ -10,14 +10,14 @@ namespace Raycaster
 {
 	public static class Raytracer
 	{
-
+        public static int reflections = 1;
 		// List of spheres in the scene
 		public static List<Sphere> spheres = new List<Sphere>();
 		// List of light sources in the scene
 		public static List<LightSource> lights = new List<LightSource>();
 
 		// Ambient color (Background color)
-		public static Color ambientColor = new Color(1f, 1f, 1f);
+		public static Color ambientColor = new Color(0.9f, 0.9f, 1f);
 
 		// Ambient intensity
 		public static float ambientIntensity = 0.3f;
@@ -32,21 +32,37 @@ namespace Raycaster
 		{
 			// Generate some spheres to the scene
 			Random r = new Random();
-			for(int x = 0; x < 20; x++)
+			/*for(int x = 0; x < 20; x++)
 			{
 				Sphere s = new Sphere(new Vector3((float)r.NextDouble() * 20 - 10f, (float)r.NextDouble() * 15 - 7.5f, (float)r.NextDouble() * 10 + 7f), (float)r.NextDouble() * 3);
 				s.color = new Color((float)r.NextDouble(), (float)r.NextDouble(), (float)r.NextDouble());
 			}
-			/*
-			Sphere s1 = new Sphere(new Vector3(-2, 0, 10), 3);
-			Sphere s2 = new Sphere(new Vector3(2, 0, 7), 1);
-
-			s1.color = new Color(0f, 1f, 1f);
-			s2.color = new Color(1f, 0f, 1f);
 			*/
+			Sphere s1 = new Sphere(new Vector3(-2, -5f, 10), 1.2f);
+			Sphere s2 = new Sphere(new Vector3(2, -4, 18), 1);
+            Sphere s3 = new Sphere(new Vector3(8, 2, 25), 0.4f);
+            Sphere s4 = new Sphere(new Vector3(1, 5, 27), 2);
+            Sphere s5 = new Sphere(new Vector3(-7, 1, 11), 1);
+            Sphere s6 = new Sphere(new Vector3(7, -2, 15), 2);
+            Sphere s7 = new Sphere(new Vector3(6, 7, 13), 2.5f);
+            Sphere s8 = new Sphere(new Vector3(5, 5, 18), 1.3f);
+            Sphere s9 = new Sphere(new Vector3(4, -4, 10), 0.5f);
+            Sphere s10 = new Sphere(new Vector3(2, 3, 12), 0.4f);
+            s1.color = new Color(0f, 1f, 1f);
+			s2.color = new Color(1f, 0f, 1f);
+            s3.color = new Color(1f, 0.4f, 0.3f);
+            s4.color = new Color(0.7f, 0.4f, 1f);
+            s4.color = new Color(0.4f, 0.1f, 1f);
+            s6.color = new Color(0f, 0.2f, 1f);
+            s7.color = new Color(0.7f, 0.4f, 0.5f);
+            s8.color = new Color(0.7f, 0.9f, 1f);
+            s9.color = new Color(0.6f, 0.4f, 0.1f);
 
-			// Start rendering
-			Render();
+            // Start rendering
+            
+            Render();
+
+            //Render();
 		}
 
 		static void SetPixel (int x, int y, Color c)
@@ -64,7 +80,7 @@ namespace Raycaster
 		}
 
 		// Calculate surface reflections
-		static void Reflection (Sphere hsphere, Vector3 hp, Vector3 dir, int x, int y, int bounces)
+		public static void Reflection (Sphere hsphere, Vector3 hp, Vector3 dir, int x, int y, int bounces)
 		{
 			Vector3 pos = new Vector3(); 
 			float rad = 0.1f;
@@ -184,13 +200,19 @@ namespace Raycaster
 				if(bounces < 1)
 				{
 					// Reflection
-					Reflection(hsphere2, hp2, rdir, x, y, bounces + 1);
+                    Reflection(hsphere2, hp2, rdir, x, y, bounces + 1);
+
 				}
 				
 			}
 			
 
 		}
+
+        static void createThread()
+        {
+
+        }
 
 		public static void Render ()
 		{
@@ -208,7 +230,8 @@ namespace Raycaster
 					SetPixel(x, y, ambientColor);
 				}
 			}
-
+            List<Task> tasks = new List<Task>() ;
+            int i = 0;
 			// Get the center of the screen
 			Vector2 center = new Vector2((int)Display.image.Width / 2, (int)Display.image.Height / 2);
 			for(int y = 0; y < Display.image.Height; y++)
@@ -220,13 +243,21 @@ namespace Raycaster
 					// Get ray X and Y directions for the corresponding pixel
 					float xv = (x - center.x) / (float)Display.image.Height;
 					float yv = -(y - center.y) / (float)Display.image.Height;
+                    var t = new Task(() =>
+                    {
+                        Reflection(null, new Vector3(0, 0, 0.1f), -new Vector3(xv, yv, 1f).normalized, x, y, reflections);
+                    });
+                    tasks.Add(t);
+                    t.Start();
+                    i++;
+                }
 
-					Reflection(null, new Vector3(0, 0, 0.1f), -new Vector3(xv, yv, 1f).normalized, x, y, 0);
-				}
-			}
-			
-			
-			for (int y = 0; y < (int)Display.image.Height; y++)
+            }
+            while (tasks.Any(t=> !t.IsCompleted)) { }
+            Thread.Sleep(100);
+
+
+            for (int y = 0; y < (int)Display.image.Height; y++)
 			{
 				for (int x = 0; x < (int)Display.image.Width; x++)
 				{
