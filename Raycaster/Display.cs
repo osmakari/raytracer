@@ -27,7 +27,9 @@ namespace Raycaster
 			image.Source = bmp;
 
 		}
-
+		
+		// Source: https://docs.microsoft.com/en-us/dotnet/api/system.windows.media.imaging.writeablebitmap?view=netframework-4.8 
+		
 		public static void DrawPixel(int x, int y, Color c)
 		{
 			int column = x;

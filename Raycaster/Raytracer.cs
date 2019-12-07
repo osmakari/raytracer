@@ -16,11 +16,13 @@ namespace Raycaster
 		// List of light sources in the scene
 		public static List<LightSource> lights = new List<LightSource>();
 
+		public static LightSource lightSource = new LightSource(new Vector3(-1, 1, -0.5f));
+
 		// Ambient color (Background color)
-		public static Color ambientColor = new Color(0.9f, 0.9f, 1f);
+		public static Color ambientColor = new Color(0f, 0f, 0f);
 
 		// Ambient intensity
-		public static float ambientIntensity = 0.3f;
+		public static float ambientIntensity = 0.4f;
 
 		public static byte[] pixels;
 
@@ -40,15 +42,15 @@ namespace Raycaster
 			*/
 			Sphere s1 = new Sphere(new Vector3(-2, -5f, 10), 1.2f);
 			Sphere s2 = new Sphere(new Vector3(2, -4, 18), 1);
-            Sphere s3 = new Sphere(new Vector3(8, 2, 25), 0.4f);
-            Sphere s4 = new Sphere(new Vector3(1, 5, 27), 2);
-            Sphere s5 = new Sphere(new Vector3(-7, 1, 11), 1);
-            Sphere s6 = new Sphere(new Vector3(7, -2, 15), 2);
-            Sphere s7 = new Sphere(new Vector3(6, 7, 13), 2.5f);
-            Sphere s8 = new Sphere(new Vector3(5, 5, 18), 1.3f);
-            Sphere s9 = new Sphere(new Vector3(4, -4, 10), 0.5f);
-            Sphere s10 = new Sphere(new Vector3(2, 3, 12), 0.4f);
-            s1.color = new Color(0f, 1f, 1f);
+			Sphere s3 = new Sphere(new Vector3(8, 2, 25), 0.4f);
+			Sphere s4 = new Sphere(new Vector3(1, 5, 27), 2);
+			Sphere s5 = new Sphere(new Vector3(-7, 1, 11), 1);
+			Sphere s6 = new Sphere(new Vector3(7, -2, 15), 2);
+			Sphere s7 = new Sphere(new Vector3(6, 7, 13), 2.5f);
+			Sphere s8 = new Sphere(new Vector3(5, 5, 18), 1.3f);
+			Sphere s9 = new Sphere(new Vector3(4, -4, 10), 0.5f);
+			Sphere s10 = new Sphere(new Vector3(2, 3, 12), 0.4f);
+			s1.color = new Color(0f, 1f, 1f);
 			s2.color = new Color(1f, 0f, 1f);
             s3.color = new Color(1f, 0.4f, 0.3f);
             s4.color = new Color(0.7f, 0.4f, 1f);
@@ -83,19 +85,46 @@ namespace Raycaster
 			return new Color((float)(pixels[p]/255f), (float)(pixels[p + 1] / 255f), (float)(pixels[p + 2] / 255f));
 		}
 
+		static bool IsIntersecting (Vector3 origin, Vector3 dir, Sphere s)
+		{
+
+			Vector3 m = origin - s.position;
+			// Radius of the sphere
+			float r = s.radius;
+
+			// Dot product of m and reflection direction
+			float b = Vector3.Dot(m, dir);
+
+
+			float c = Vector3.Dot(m, m) - r * r;
+
+			// Check if ray is pointing away from the sphere
+			if (c > 0.0f && b > 0.0f)
+				return false;
+
+
+			float discr = b * b - c;
+			if (discr < 0.0f)
+				return false;
+
+			return true;
+
+		}
+
 		// Calculate surface reflections
 		public static void Reflection (Sphere hsphere, Vector3 hp, Vector3 dir, int x, int y, int bounces)
 		{
 			Vector3 pos = new Vector3(); 
 			float rad = 0.1f;
-			if(hsphere != null)
+			// Reflection vector
+			Vector3 rdir = dir.normalized;
+			if (hsphere != null)
 			{
 				pos = hsphere.position;
 				rad = hsphere.radius;
+				rdir = (dir - 2 * Vector3.Dot(dir, (hp - pos).normalized) * (hp - pos).normalized).normalized;
 			}
-
-			// Reflection vector
-			Vector3 rdir = (dir - 2 * Vector3.Dot(dir, (hp - pos).normalized) * (hp - pos).normalized).normalized;
+			
 			//Random rnd = new Random();
 			//Vector3 rv = new Vector3((float)(rnd.NextDouble() * 0.01) - 0.005f, (float)(rnd.NextDouble() * 0.01) - 0.005f, (float)(rnd.NextDouble() * 0.01) - 0.005f);
 
@@ -180,12 +209,13 @@ namespace Raycaster
 				}
 
 			}
+			
 			// Intersection found, calculate pixel value
 			if (hsphere2 != null)
 			{
 
-				float dv = Vector3.Dot(rdir, hp2 - hsphere2.position);
-				float angle = dv / (rdir.magnitude * (hp2 - hsphere2.position).magnitude);
+				float dv = Vector3.Dot(lightSource.direction, hp2 - hsphere2.position);
+				float angle = dv / (lightSource.direction.magnitude * (hp2 - hsphere2.position).magnitude);
 
 				float c = Math.Abs(angle / (float)Math.PI);
 				/*
@@ -195,20 +225,61 @@ namespace Raycaster
 					ambientColor.b * c * (hsphere2.color.b / (bounces + 2)) + (ambientColor.b * ambientIntensity))
 				);
 				*/
+				bool intersects = false;
+				for(int i = 0; i < spheres.Count; i++)
+				{
+					if(IsIntersecting(hp2 + (hp2 - hsphere2.position).normalized * 0.001f, lightSource.direction, spheres[i]))
+					{
+						intersects = true;
+						break;
+					}
+				}
 				
-				SetPixel(x, y, new Color(
-					ambientColor.r * c * (hsphere2.color.r / (bounces + 1)) + (ambientColor.r * ambientIntensity),
-					ambientColor.g * c * (hsphere2.color.g / (bounces + 1)) + (ambientColor.g * ambientIntensity),
-					ambientColor.b * c * (hsphere2.color.b / (bounces + 1)) + (ambientColor.b * ambientIntensity))
-				);
+				if(!intersects)
+				{
+					SetPixel(x, y, new Color(
+						c * lightSource.intensity * (hsphere2.color.r / (bounces + 1)) + (ambientColor.r * ambientIntensity),
+						c * lightSource.intensity * (hsphere2.color.g / (bounces + 1)) + (ambientColor.g * ambientIntensity),
+						c * lightSource.intensity * (hsphere2.color.b / (bounces + 1)) + (ambientColor.b * ambientIntensity))
+					);
+				}
+				else
+				{
+					SetPixel(x, y, new Color(
+						0.01f * (hsphere2.color.r / (bounces + 1)) + (ambientColor.r * ambientIntensity),
+						0.01f * (hsphere2.color.g / (bounces + 1)) + (ambientColor.g * ambientIntensity),
+						0.01f * (hsphere2.color.b / (bounces + 1)) + (ambientColor.b * ambientIntensity)
+					));
+				}
+				
 				
 
 				if(bounces < maxReflections)
 				{
 					// Reflection
-                    Reflection(hsphere2, hp2, rdir, x, y, bounces + 1);
+					Reflection(hsphere2, hp2, rdir, x, y, bounces + 1);
 
 				}
+				
+			}
+			else
+			{
+				/*
+				Vector3 planeNormal = new Vector3(0, 1, 0);
+				Vector3 planePos = new Vector3(0, -1, 0);
+				if(rdir.y < 0)
+				{
+					float t = (hp.y - planePos.y)/rdir.y;
+
+					SetPixel(x, y, new Color(
+						0.7f/(bounces + 1), 0.7f/ (bounces + 1), 0.7f/(bounces + 1)
+					));
+					if (bounces < maxReflections)
+					{ 
+						Reflection(null, hp + rdir * t, rdir - 2 * (Vector3.Dot(rdir, planeNormal)) * planeNormal, x, y, bounces + 1);
+					}
+				}
+				*/
 				
 			}
 			
@@ -274,7 +345,7 @@ namespace Raycaster
 				float xv = (x - center.x) / (float)h;
 				float yv = -(yp - center.y) / (float)h;
 				
-				Reflection(null, new Vector3(0, 0, 0.1f), -new Vector3(xv, yv, 1f).normalized, x, yp, 0);
+				Reflection(null, new Vector3(0, 0, 0.1f), new Vector3(xv, yv, 1f).normalized, x, yp, 0);
 				
 				
 			}
@@ -320,7 +391,7 @@ namespace Raycaster
 
 		public LightSource (Vector3 dir)
 		{
-			direction = dir;
+			direction = dir.normalized;
 		}
 	}
 	
