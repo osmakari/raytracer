@@ -10,7 +10,7 @@ namespace Raycaster
 {
 	public static class Raytracer
 	{
-        public static int reflections = 1;
+        public static int maxReflections = 2;
 		// List of spheres in the scene
 		public static List<Sphere> spheres = new List<Sphere>();
 		// List of light sources in the scene
@@ -67,10 +67,14 @@ namespace Raycaster
 
 		static void SetPixel (int x, int y, Color c)
 		{
-			int p = ((y * (int)sWidth) + x) * 3;
-			pixels[p] = (byte)(c.r * 255);
-			pixels[p + 1] = (byte)(c.g * 255);
-			pixels[p + 2] = (byte)(c.b * 255);
+			lock (pixels)
+			{
+				int p = ((y * (int)sWidth) + x) * 3;
+				pixels[p] = (byte)(c.r * 255);
+				pixels[p + 1] = (byte)(c.g * 255);
+				pixels[p + 2] = (byte)(c.b * 255);
+				
+			}
 		}
 
 		static Color GetPixel (int x, int y)
@@ -191,13 +195,15 @@ namespace Raycaster
 					ambientColor.b * c * (hsphere2.color.b / (bounces + 2)) + (ambientColor.b * ambientIntensity))
 				);
 				*/
+				
 				SetPixel(x, y, new Color(
 					ambientColor.r * c * (hsphere2.color.r / (bounces + 1)) + (ambientColor.r * ambientIntensity),
 					ambientColor.g * c * (hsphere2.color.g / (bounces + 1)) + (ambientColor.g * ambientIntensity),
 					ambientColor.b * c * (hsphere2.color.b / (bounces + 1)) + (ambientColor.b * ambientIntensity))
 				);
+				
 
-				if(bounces < 1)
+				if(bounces < maxReflections)
 				{
 					// Reflection
                     Reflection(hsphere2, hp2, rdir, x, y, bounces + 1);
@@ -208,12 +214,7 @@ namespace Raycaster
 			
 
 		}
-
-        static void createThread()
-        {
-
-        }
-
+		
 		public static void Render ()
 		{
 			sWidth = (int)Display.image.Width;
@@ -228,33 +229,27 @@ namespace Raycaster
 				{
 					//Display.DrawPixel(x, y, ambientColor);
 					SetPixel(x, y, ambientColor);
+					
 				}
 			}
-            List<Task> tasks = new List<Task>() ;
-            int i = 0;
+			List<Task> tasks = new List<Task>();
+
 			// Get the center of the screen
 			Vector2 center = new Vector2((int)Display.image.Width / 2, (int)Display.image.Height / 2);
-			for(int y = 0; y < Display.image.Height; y++)
+			int iw = (int)Display.image.Width;
+			int ih = (int)Display.image.Height;
+			for(int y = 0; y < Display.image.Height - 1; y++)
 			{
-				for(int x = 0; x < Display.image.Width; x++)
-				{
-					
-					// Note: Camera is always at (0, 0, 0) and is pointing (0, 0, 1)
-					// Get ray X and Y directions for the corresponding pixel
-					float xv = (x - center.x) / (float)Display.image.Height;
-					float yv = -(y - center.y) / (float)Display.image.Height;
-                    var t = new Task(() =>
-                    {
-                        Reflection(null, new Vector3(0, 0, 0.1f), -new Vector3(xv, yv, 1f).normalized, x, y, reflections);
-                    });
-                    tasks.Add(t);
-                    t.Start();
-                    i++;
-                }
-
-            }
-            while (tasks.Any(t=> !t.IsCompleted)) { }
-            Thread.Sleep(100);
+				int realY = y;
+				var t = new Task(() => {
+					RenderRow(center, realY, ih, iw);
+				});
+				tasks.Add(t);
+				t.Start();
+			}
+			//while (tasks.Any(t=> !t.IsCompleted)) { }
+			//Thread.Sleep(100);
+			Task.WaitAll(tasks.ToArray());
 
 
             for (int y = 0; y < (int)Display.image.Height; y++)
@@ -268,7 +263,25 @@ namespace Raycaster
 			pixels = null;
 			GC.Collect();
 		}
+
+		public static void RenderRow(Vector2 center, int yp, int h, int w)
+		{
+			for (int x = 0; x < w; x++)
+			{
+
+				// Note: Camera is always at (0, 0, 0) and is pointing (0, 0, 1)
+				// Get ray X and Y directions for the corresponding pixel
+				float xv = (x - center.x) / (float)h;
+				float yv = -(yp - center.y) / (float)h;
+				
+				Reflection(null, new Vector3(0, 0, 0.1f), -new Vector3(xv, yv, 1f).normalized, x, yp, 0);
+				
+				
+			}
+		}
 	}
+
+	
 	/// <summary>
 	/// Sphere class
 	/// </summary>
