@@ -47,21 +47,86 @@ namespace Raycaster
             //testing purposes
             
             GenerateSpheres gs = new GenerateSpheres();
-            // Start rendering
-            for (int i = 0; i < 20; i++)
+
+            for(int rounds = 0; rounds < 10; rounds++)
             {
-                maxReflections = i+1;
-                Console.Write("Calculating with " + maxReflections + " reflections ");
-                stopWatch.Start();
-                Render();
-                TimeSpan ts = stopWatch.Elapsed;
-                // Format and display the TimeSpan value.
-                string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-                    ts.Hours, ts.Minutes, ts.Seconds,
-                    ts.Milliseconds / 10);
-                Console.Write("| RunTime: " + elapsedTime +"\n");
-                stopWatch.Reset();
+                spheres.Clear();
+                if (rounds == 0)
+                {
+                    spheres.Add(gs.sphereList[0]);
+                }
+                else
+                {
+                    for (int o = 0; o < rounds * 10; o++) spheres.Add(gs.sphereList[o]);
+                }
+                for (int i = 0; i < 1; i++)
+                {
+                    maxReflections = 1;
+                    Console.Write("Calculating round " + rounds + " with " + maxReflections + " reflections ");
+                    stopWatch.Start();
+                    Render();
+                    TimeSpan ts = stopWatch.Elapsed;
+                    // Format and display the TimeSpan value.
+                    string elapsedTime = String.Format("{0:00}:{1:00}:{2:00},{3:00}",
+                        ts.Hours, ts.Minutes, ts.Seconds,
+                        ts.Milliseconds / 10);
+                    Console.Write("| RunTime: " + elapsedTime + "\n");
+                    stopWatch.Reset();
+                }
             }
+            for (int rounds = 0; rounds < 10; rounds++)
+            {
+                spheres.Clear();
+                if (rounds == 0)
+                {
+                    spheres.Add(gs.sphereList[0]);
+                }
+                else
+                {
+                    for (int o = 0; o < rounds * 10; o++) spheres.Add(gs.sphereList[o]);
+                }
+                for (int i = 0; i < 1; i++)
+                {
+                    maxReflections = 5;
+                    Console.Write("Calculating round " + rounds + " with " + maxReflections + " reflections ");
+                    stopWatch.Start();
+                    Render();
+                    TimeSpan ts = stopWatch.Elapsed;
+                    // Format and display the TimeSpan value.
+                    string elapsedTime = String.Format("{0:00}:{1:00}:{2:00},{3:00}",
+                        ts.Hours, ts.Minutes, ts.Seconds,
+                        ts.Milliseconds / 10);
+                    Console.Write("| RunTime: " + elapsedTime + "\n");
+                    stopWatch.Reset();
+                }
+            }
+            for (int rounds = 0; rounds < 10; rounds++)
+            {
+                spheres.Clear();
+                if (rounds == 0)
+                {
+                    spheres.Add(gs.sphereList[0]);
+                }
+                else
+                {
+                    for (int o = 0; o < rounds * 10; o++) spheres.Add(gs.sphereList[o]);
+                }
+                for (int i = 0; i < 1; i++)
+                {
+                    maxReflections = 20;
+                    Console.Write("Calculating round " + rounds + " with " + maxReflections + " reflections ");
+                    stopWatch.Start();
+                    Render();
+                    TimeSpan ts = stopWatch.Elapsed;
+                    // Format and display the TimeSpan value.
+                    string elapsedTime = String.Format("{0:00}:{1:00}:{2:00},{3:00}",
+                        ts.Hours, ts.Minutes, ts.Seconds,
+                        ts.Milliseconds / 10);
+                    Console.Write("| RunTime: " + elapsedTime + "\n");
+                    stopWatch.Reset();
+                }
+            }
+            // Start rendering
             //Render();
         }
 

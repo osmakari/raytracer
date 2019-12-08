@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         Title="Raycaster" Height="900" Width="1600">
 	<Grid>
-		<Image x:Name="mainImage" HorizontalAlignment="Left" Width="1592" Height="869" VerticalAlignment="Top"/>
-
-	</Grid>
+        <Viewbox Grid.ColumnSpan="1" Grid.Row="1"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
+            <Image x:Name="mainImage" HorizontalAlignment="Left" Width="1920" Height="1080" VerticalAlignment="Top" Stretch="Fill"  RenderTransformOrigin="0.344,0.278"/>
+        </Viewbox>
+    </Grid>
 </Window>
