@@ -326,7 +326,7 @@ namespace Raycaster
 			else
 			{
 				
-				Vector3 planeNormal = new Vector3(0, -5, 0);
+				Vector3 planeNormal = new Vector3(0, 1, 0);
 				Vector3 planePos = new Vector3(0, -1, 0);
 				if(rdir.y < 0)
 				{
