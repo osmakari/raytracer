@@ -16,7 +16,7 @@ namespace Raycaster
 		// List of light sources in the scene
 		public static List<LightSource> lights = new List<LightSource>();
 
-		public static LightSource lightSource = new LightSource(new Vector3(-1, 1, -0.5f));
+		public static LightSource lightSource = new LightSource(new Vector3(0, 1, -1f));
 
 		// Ambient color (Background color)
 		public static Color ambientColor = new Color(0f, 0f, 0f);
@@ -48,7 +48,7 @@ namespace Raycaster
             
             GenerateSpheres gs = new GenerateSpheres();
 
-            for(int rounds = 0; rounds < 10; rounds++)
+            for(int rounds = 4; rounds < 5; rounds++)
             {
                 spheres.Clear();
                 if (rounds == 0)
@@ -74,7 +74,8 @@ namespace Raycaster
                     stopWatch.Reset();
                 }
             }
-            for (int rounds = 0; rounds < 10; rounds++)
+			/*
+            for (int rounds = 0; rounds < 1; rounds++)
             {
                 spheres.Clear();
                 if (rounds == 0)
@@ -100,7 +101,7 @@ namespace Raycaster
                     stopWatch.Reset();
                 }
             }
-            for (int rounds = 0; rounds < 10; rounds++)
+            for (int rounds = 0; rounds < 1; rounds++)
             {
                 spheres.Clear();
                 if (rounds == 0)
@@ -126,6 +127,7 @@ namespace Raycaster
                     stopWatch.Reset();
                 }
             }
+			*/
             // Start rendering
             //Render();
         }
@@ -329,17 +331,35 @@ namespace Raycaster
 			{
 				
 				Vector3 planeNormal = new Vector3(0, -5, 0);
-				Vector3 planePos = new Vector3(0, -100, 0);
+				Vector3 planePos = new Vector3(0, -1, 0);
 				if(rdir.y < 0)
 				{
 					float t = (hp.y - planePos.y)/rdir.y;
-
-					SetPixel(x, y, new Color(
-						0.7f/(bounces + 1), 0.7f/ (bounces + 1), 0.99f)
-					);
+					bool intersects = false;
+					for (int i = 0; i < spheres.Count; i++)
+					{
+						if (IsIntersecting(hp + rdir * -t, lightSource.direction, spheres[i]))
+						{
+							intersects = true;
+							break;
+						}
+					}
+					if(!intersects)
+					{
+						SetPixel(x, y, new Color(
+							0.7f / (bounces + 1), 0.7f / (bounces + 1), 0.99f)
+						);
+					}
+					else
+					{
+						SetPixel(x, y, new Color(
+							0.1f / (bounces + 1), 0.1f / (bounces + 1), 0.33f)
+						);
+					}
+					
 					if (bounces < maxReflections)
 					{ 
-						Reflection(null, hp + rdir * t, rdir - 2 * (Vector3.Dot(rdir, planeNormal)) * planeNormal, x, y, bounces + 1);
+						Reflection(null, hp + rdir * -t, rdir - 2 * (Vector3.Dot(rdir, planeNormal)) * planeNormal, x, y, bounces + 1);
 					}
 				}
 				
