@@ -80,7 +80,10 @@ namespace Raycaster
             spheres.Clear();
             for (int i = 0; i < 1; i++)
                 {
-                for (int o = 0; o < sphereInt; o++) spheres.Add(gs.sphereList[o]);
+                for (int o = 0; o < sphereInt; o++) {
+                    Sphere s = new Sphere(new Vector3((float)r.NextDouble() * 20 - 10f, (float)r.NextDouble() * 15 - 7.5f, (float)r.NextDouble() * 10 + 7f), (float)r.NextDouble() * 3);
+                    s.color = new Color((float)r.NextDouble(), (float)r.NextDouble(), (float)r.NextDouble());
+                };
                 //Console.Write("Calculating round " + rounds + " with " + maxReflections + " reflections ");
                     Console.Write("Calculating " + spheres.Count + " objects with " + maxReflections + " reflections ");
                     stopWatch.Start();
