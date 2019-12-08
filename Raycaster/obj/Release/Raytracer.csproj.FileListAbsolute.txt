@@ -38,3 +38,4 @@ E:\Git\raycaster-current\Raycaster\obj\Release\Raycaster.Properties.Resources.re
 E:\Git\raycaster-current\Raycaster\obj\Release\Raytracer.csproj.GenerateResource.cache
 E:\Git\raycaster-current\Raycaster\obj\Release\Raycaster.exe
 E:\Git\raycaster-current\Raycaster\obj\Release\Raycaster.pdb
+E:\Git\raycaster-current\Raycaster\obj\Release\Raytracer.csprojAssemblyReference.cache

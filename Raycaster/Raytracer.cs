@@ -26,10 +26,9 @@ namespace Raycaster
 
 		public static byte[] pixels;
 
-		private static readonly int sWidth = 3840;
-		private static readonly int sHeight = 2160;
+		private static int sWidth;
+		private static int sHeight;
 
-        private static TimeSpan time = new TimeSpan();
 		// Main raytrace function
 		public static void RayTrace ()
 		{
@@ -38,29 +37,9 @@ namespace Raycaster
 
             // Generate some spheres to the scene
             Random r = new Random();
-            /*for(int x = 0; x < 20; x++)
-			{
-				Sphere s = new Sphere(new Vector3((float)r.NextDouble() * 20 - 10f, (float)r.NextDouble() * 15 - 7.5f, (float)r.NextDouble() * 10 + 7f), (float)r.NextDouble() * 3);
-				s.color = new Color((float)r.NextDouble(), (float)r.NextDouble(), (float)r.NextDouble());
-			}
-			*/
-            //testing purposes
-            
+  
             GenerateSpheres gs = new GenerateSpheres();
 
-
-            /* for (int rounds = 0; rounds < 10; rounds++)
-             {
-                 spheres.Clear();
-                 if (rounds == 0)
-                 {
-                     spheres.Add(gs.sphereList[0]);
-                 }
-                 else
-                 {
-                     for (int o = 0; o < rounds * 10; o++) spheres.Add(gs.sphereList[o]);
-                 }
-              */
             Console.WriteLine("Input amount of objects(int): ");
             string sphereCount = Console.ReadLine();
             Console.WriteLine("Input amount of reflections(int): ");
@@ -84,7 +63,6 @@ namespace Raycaster
                     Sphere s = new Sphere(new Vector3((float)r.NextDouble() * 20 - 10f, (float)r.NextDouble() * 15 - 7.5f, (float)r.NextDouble() * 10 + 7f), (float)r.NextDouble() * 3);
                     s.color = new Color((float)r.NextDouble(), (float)r.NextDouble(), (float)r.NextDouble());
                 };
-                //Console.Write("Calculating round " + rounds + " with " + maxReflections + " reflections ");
                     Console.Write("Calculating " + spheres.Count + " objects with " + maxReflections + " reflections ");
                     stopWatch.Start();
                     Render();
@@ -96,36 +74,7 @@ namespace Raycaster
                     Console.Write("| RunTime: " + elapsedTime + "\n");
                     stopWatch.Reset();
                 }
-            /*}
-            for (int rounds = 0; rounds < 10; rounds++)
-            {
-                spheres.Clear();
-                if (rounds == 0)
-                {
-                    spheres.Add(gs.sphereList[0]);
-                }
-                else
-                {
-                    for (int o = 0; o < rounds * 10; o++) spheres.Add(gs.sphereList[o]);
-                }
-                for (int i = 0; i < 1; i++)
-                {
-                    maxReflections = 20;
-                    Console.Write("Calculating round " + rounds + " with " + maxReflections + " reflections ");
-                    stopWatch.Start();
-                    Render();
-                    TimeSpan ts = stopWatch.Elapsed;
-                    // Format and display the TimeSpan value.
-                    string elapsedTime = String.Format("{0:00}:{1:00}:{2:00},{3:00}",
-                        ts.Hours, ts.Minutes, ts.Seconds,
-                        ts.Milliseconds / 10);
-                    Console.Write("| RunTime: " + elapsedTime + "\n");
-                    stopWatch.Reset();
-                }
-            }
-            */
-            // Start rendering
-            //Render();
+          
         }
 
         static void SetPixel (int x, int y, Color c)
@@ -185,13 +134,7 @@ namespace Raycaster
 				rad = hsphere.radius;
 				rdir = (dir - 2 * Vector3.Dot(dir, (hp - pos).normalized) * (hp - pos).normalized).normalized;
 			}
-			
-			//Random rnd = new Random();
-			//Vector3 rv = new Vector3((float)(rnd.NextDouble() * 0.01) - 0.005f, (float)(rnd.NextDouble() * 0.01) - 0.005f, (float)(rnd.NextDouble() * 0.01) - 0.005f);
-
-			//rdir += rv;
-
-			//rdir = rdir.normalized;
+	
 
 			// Hit point
 			Vector3 hp2 = null;
@@ -367,8 +310,8 @@ namespace Raycaster
 		
 		public static void Render ()
 		{
-			//sWidth = (int)Display.image.Width;
-			//sHeight = (int)Display.image.Height;
+			sWidth = (int)Display.image.Width;
+			sHeight = (int)Display.image.Height;
 			pixels = new byte[sWidth * sHeight * 3];
 			Debug.WriteLine("PIXELS: " + pixels.Length);
 
